@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "module": "es2022",
+    "target": "es2017"
+  },
+  "exclude": ["node_modules", "dist"]
+}

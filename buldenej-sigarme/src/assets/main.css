@@ -1,0 +1,18 @@
+@import './base.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Limit the width of the page and everything inside, have like 10% margin at the left and right on larger screens */
+body {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 5%; /* Add padding for larger screens */
+}
+
+/* Remove the margin on smaller screens */
+@media (max-width: 768px) {
+  body {
+    padding: 0 16px; /* Add some padding on smaller screens */
+  }
+}
