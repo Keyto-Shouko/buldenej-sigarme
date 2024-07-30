@@ -1,13 +1,12 @@
 <template>
   <div id="container" class="relative flex items-center justify-center">
-    <div class="top-left"></div>
-    <div class="top-right"></div>
-    <div class="bottom-left"></div>
-    <div class="bottom-right"></div>
     <div class="gallery">
-      <img src="../assets/images/Buldenej.png" alt="Buldenej" />
-      <div class="separator"></div>
-      <img src="../assets/images/Sigarme.png" alt="Sigarme" />
+      <div class="img-container">
+        <img src="../assets/images/Buldenej.png" alt="Buldenej" />
+      </div>
+      <div class="img-container">
+        <img src="../assets/images/Sigarme.png" alt="Sigarme" />
+      </div>
     </div>
   </div>
 </template>
@@ -18,7 +17,6 @@
   backdrop-filter: blur(16px);
   width: 928px;
   height: 395px;
-  border-radius: 10px;
   overflow: hidden;
   position: relative;
   display: flex;
@@ -28,91 +26,90 @@
 
 .gallery {
   --s: 98px; /* Control the slanted part */
-  border-radius: 16px;
   display: flex;
   height: 100%; /* The height of the images */
-  gap: 0px; /* Control the gap */
+  width: 100%;
 }
-.gallery > img {
+
+.img-container {
+  position: relative;
   flex: 1;
-  min-width: 0;
-  object-fit: cover;
-  cursor: pointer;
-  transition: 0.5s;
+  overflow: hidden;
+  transition: flex 0.5s ease;
 }
-.gallery > img:hover {
+
+.img-container img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.img-container:hover {
   flex: 1.8;
 }
-.gallery > img:first-child {
+
+.img-container:first-child {
   margin-right: calc(-0.5 * var(--s));
   clip-path: polygon(0 0, 100% 0, calc(100% - var(--s)) 100%, 0 100%);
+  border-top-left-radius: 16px;
+  border-bottom-left-radius: 16px;
+  border: 3px solid transparent;
+  background: linear-gradient(
+    135deg,
+    rgba(228, 186, 30, 1),
+    rgba(228, 186, 30, 1) 26%,
+    rgba(0, 0, 0, 0.2) 26%,
+    rgba(0, 0, 0, 0.2) 74%
+  );
+  background-origin: border-box;
+  background-clip: border-box;
+  mask-image:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
 }
-.gallery > img:last-child {
+
+.img-container:first-child::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 46px; /* Adjust to fit the design */
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(228, 186, 30, 0) 0%,
+    /* Fully transparent at the top */ rgba(228, 186, 30, 0.5) 20%,
+    /* Fades in a bit */ rgba(228, 186, 30, 1) 50%,
+    /* Full gold color in the center */ rgba(228, 186, 30, 0.5) 80%,
+    /* Fades out again */ rgba(228, 186, 30, 0) 100% /* Fully transparent at the bottom */
+  );
+  transform: rotate(13.86deg); /* Applying rotation */
+  z-index: 1; /* Ensure it appears above the background but below other content */
+}
+
+.img-container:last-child {
   margin-left: calc(-0.5 * var(--s));
   clip-path: polygon(var(--s) 0, 100% 0, 100% 100%, 0 100%);
-}
-
-.top-left,
-.top-right,
-.bottom-left,
-.bottom-right {
-  position: absolute;
-  pointer-events: none;
-  z-index: 1; /* Ensure the elements are above other content */
-}
-
-.top-left {
-  top: -6px; /* Adjusted to push the border out more */
-  left: -6px; /* Adjusted to push the border out more */
-  width: calc(50% + 6px); /* Adjusted to maintain the correct size */
-  height: calc(50% + 6px); /* Adjusted to maintain the correct size */
-  border-top: 6px solid transparent; /* Increased border width */
-  border-left: 6px solid transparent; /* Increased border width */
-  background:
-    linear-gradient(to right, rgba(228, 186, 30, 1), rgba(228, 186, 30, 0)) 0 0,
-    linear-gradient(to bottom, rgba(228, 186, 30, 1), rgba(228, 186, 30, 0)) 0 0;
-  background-size:
-    100% 6px,
-    6px 100%; /* Adjusted to match the new border width */
-  background-repeat: no-repeat;
-}
-
-.bottom-right {
-  bottom: -6px; /* Adjusted to push the border out more */
-  right: -6px; /* Adjusted to push the border out more */
-  width: calc(50% + 6px); /* Adjusted to maintain the correct size */
-  height: calc(50% + 6px); /* Adjusted to maintain the correct size */
-  border-bottom: 6px solid transparent; /* Increased border width */
-  border-right: 6px solid transparent; /* Increased border width */
-  background:
-    linear-gradient(to left, rgba(228, 186, 30, 1), rgba(228, 186, 30, 0)) 100% 100%,
-    linear-gradient(to top, rgba(228, 186, 30, 1), rgba(228, 186, 30, 0)) 100% 100%;
-  background-size:
-    100% 6px,
-    6px 100%; /* Adjusted to match the new border width */
-  background-repeat: no-repeat;
-}
-
-.separator {
-  bottom: 0;
-  width: 3px;
-  transform: rotate(13.86deg);
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  border: 3px solid transparent;
   background: linear-gradient(
-    180deg,
-    rgba(228, 186, 30, 0) 0%,
-    /* Start of gradient */ rgba(228, 186, 30, 0) 20%,
-    /* Fading starts */ #e4ba1e 40%,
-    /* Solid color */ #e4ba1e 60%,
-    /* Solid color continues */ rgba(228, 186, 30, 0) 80%,
-    /* Fading ends */ rgba(228, 186, 30, 0) 100% /* End of gradient */
+    -45deg,
+    rgba(228, 186, 30, 1),
+    rgba(228, 186, 30, 1) 26%,
+    rgba(0, 0, 0, 0.2) 26%,
+    rgba(0, 0, 0, 0.2) 74%
   );
-  z-index: 2;
-  pointer-events: none; /* Allow interaction with images below */
-}
-
-/* Hide the unused elements */
-.top-right,
-.bottom-left {
-  display: none;
+  background-origin: border-box;
+  background-clip: border-box;
+  mask-image:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
 }
 </style>
