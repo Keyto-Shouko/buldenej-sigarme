@@ -11,7 +11,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, orange, darkorange);
+  background: linear-gradient(to bottom, #9e5021, #47240f);
   z-index: -1; /* Ensure it stays in the background */
 }
 </style>
