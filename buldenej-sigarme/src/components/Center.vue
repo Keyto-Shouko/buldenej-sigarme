@@ -186,6 +186,9 @@
   #container {
     margin-top: 100px; /* Adjust as needed */
     height: auto;
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .gallery {

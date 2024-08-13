@@ -26,9 +26,11 @@ function closeSidePanel() {
       <a href="#" class="nav-item text-white hover:text-yellow-400">Conventions</a>
     </div>
     <div class="flex items-center separator">
+      <router-link to="/admin">
       <span class="logo-separator text-yellow-500 mx-2">
         <img src="../assets/images/NavIMG.webp" alt="logo" class="h-8" />
       </span>
+    </router-link>
     </div>
     <div class="flex items-center right-items">
       <a
@@ -99,6 +101,11 @@ function closeSidePanel() {
   justify-content: space-between;
   align-items: center;
   z-index: 100;
+}
+
+/* restyle the separator to have the same eight as the others*/
+.separator {
+  height: 30px;
 }
 
 .logo-separator img {

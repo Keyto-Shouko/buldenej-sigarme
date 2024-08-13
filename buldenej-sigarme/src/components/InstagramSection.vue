@@ -1,13 +1,13 @@
 <template>
   <div class="p-8 min-h-screen InstaSection">
     <div class="flex flex-col md:flex-row md:justify-center">
-      <div class="flex flex-col w-full md:w-1/2 p-4">
+      <div class="flex flex-col w-full md:w-1/2 md:ml-5 mb-4">
         <div class="text-center mb-4 text-yellow-300 text-lg font-semibold Artists">Buldenej</div>
         <div class="grid space-y-1 gap-4">
           <InstagramPost v-for="post in column1" :key="post.id" :msg="post.url" />
         </div>
       </div>
-      <div class="flex flex-col w-full md:w-1/2 p-4 md:ml-5">
+      <div class="flex flex-col w-full md:w-1/2 md:ml-5">
         <div class="text-center mb-4 text-yellow-300 text-lg font-semibold Artists">Sigarme</div>
         <div class="grid space-y-1 gap-4">
           <InstagramPost v-for="post in column2" :key="post.id" :msg="post.url" />
