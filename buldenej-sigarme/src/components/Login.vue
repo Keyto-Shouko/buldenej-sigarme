@@ -19,13 +19,20 @@ const handleLogin = async () => {
     // Handle login error (e.g., show a message to the user)
   }
 }
+
+const handleKeydown = (event) => {
+  if (event.key === 'Enter') {
+    handleLogin()
+  }
+}
+
 </script>
 
 <template>
   <div class="login-container">
     <input v-model="email" type="email" placeholder="Email" class="input-field" />
     <input v-model="password" type="password" placeholder="Password" class="input-field" />
-    <button @click="handleLogin" class="login-button">Login</button>
+    <button @click="handleLogin" @keydown="handleKeydown" class="login-button">Login</button>
   </div>
 </template>
 
