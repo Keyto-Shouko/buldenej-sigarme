@@ -30,9 +30,9 @@ const handleKeydown = (event) => {
 
 <template>
   <div class="login-container">
-    <input v-model="email" type="email" placeholder="Email" class="input-field" />
-    <input v-model="password" type="password" placeholder="Password" class="input-field" />
-    <button @click="handleLogin" @keydown="handleKeydown" class="login-button">Login</button>
+    <input v-model="email" @keydown="handleKeydown" type="email" placeholder="Email" class="input-field" />
+    <input v-model="password" @keydown="handleKeydown" type="password" placeholder="Password" class="input-field" />
+    <button @click="handleLogin" class="login-button">Login</button>
   </div>
 </template>
 
