@@ -1,7 +1,8 @@
 <template>
   <div ref="postContainer" :id="uniqueId">
+    <!-- Only render the blockquote if the msg prop is valid -->
     <blockquote
-      v-if="isLoaded"
+      v-if="isLoaded && isValidMsg"
       class="instagram-media"
       :data-instgrm-permalink="msg"
       data-instgrm-version="14"
@@ -27,60 +28,69 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    msg: {
-      type: String,
-      required: true
-    }
-  },
-  data() {
-    return {
-      isLoaded: false,
-      uniqueId: `instagram-post-${Math.random().toString(36).substr(2, 9)}`
-    }
-  },
-  mounted() {
-    const observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach((entry) => {
+<script setup>
+import { onMounted, ref, computed, onBeforeUnmount } from 'vue';
+
+const props = defineProps({
+  msg: {
+    type: String,
+    required: true
+  }
+});
+
+const isLoaded = ref(false);
+const uniqueId = `instagram-post-${Math.random().toString(36).substr(2, 9)}`;
+
+// Computed property to check if msg is valid
+const isValidMsg = computed(() => {
+  return props.msg && props.msg.startsWith('https://www.instagram.com/p/');
+});
+
+let observer;
+
+onMounted(() => {
+  if (isValidMsg.value) {
+    observer = new IntersectionObserver(
+      ([entry]) => {
         if (entry.isIntersecting) {
-          this.loadInstagramPost()
-          observer.unobserve(entry.target)
+          loadInstagramPost();
+          observer.disconnect();
         }
-      })
-    })
+      },
+      { threshold: 0.1 }
+    );
 
-    observer.observe(this.$refs.postContainer)
-  },
-  methods: {
-    loadInstagramPost() {
-      this.isLoaded = true
-      const script = document.createElement('script')
-      script.async = true
-      script.defer = true
-      script.src = '//www.instagram.com/embed.js'
-      document.head.appendChild(script)
+    observer.observe(document.getElementById(uniqueId));
+  } else {
+    console.error('InstagramPost component requires a valid msg prop');
+  }
+});
 
-      script.onload = () => {
-        window.instgrm.Embeds.process()
-      }
+function loadInstagramPost() {
+  isLoaded.value = true;
+  try {
+    const script = document.createElement('script');
+    script.async = true;
+    script.defer = true;
+    script.src = '//www.instagram.com/embed.js';
+    document.head.appendChild(script);
 
-      this.$once('hook:beforeDestroy', () => {
-        document.head.removeChild(script)
-      })
-    }
+    script.onload = () => {
+      window.instgrm.Embeds.process();
+    };
+
+    onBeforeUnmount(() => {
+      document.head.removeChild(script);
+      if (observer) observer.disconnect();
+    });
+  } catch (error) {
+    console.error('Error loading Instagram embed script:', error);
   }
 }
 </script>
 
 <style scoped>
-.instagram-post {
-  /* Add any specific styles for the Instagram post here */
-}
-
 .placeholder {
-  /* Add styles for the placeholder content */
   background: #f0f0f0;
   height: 400px; /* Adjust height as needed */
   display: flex;

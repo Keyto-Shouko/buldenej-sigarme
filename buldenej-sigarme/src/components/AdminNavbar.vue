@@ -1,14 +1,16 @@
 <template>
-    <div class="admin-navbar-container">
+    <nav class="navbar w-full rounded-xl px-4 py-2 flex justify-between">
       <div class="nav-item-container">
-        <p class="nav-item home-logo">
-          Home
-        </p>
+        <router-link to="/">
+          <p class="nav-item home-logo">
+            Home
+          </p>
+        </router-link>
         <p class="nav-item admin-panel">
           Admin Panel
         </p>
       </div>
-    </div>
+    </nav>
   </template>
   
   <script>
@@ -18,19 +20,18 @@
   </script>
   
   <style scoped>
-  .admin-navbar-container {
-    width: 928px;
-    margin-top: 1.5rem;
-    height: 30px;
-    background-color: rgba(0, 0, 0, 1);
-    border: 0.5px solid #c5a643;
-    backdrop-filter: blur(16px);
-    font-family: 'MedievalSharp', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-  }
+  .navbar {
+  width: 928px;
+  margin-top: 1.5rem;
+  background-color: rgba(0, 0, 0, 1);
+  border: 0.5px solid #c5a643;
+  font-family: 'MedievalSharp', sans-serif;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  font-size: 24px;
+}
   
   .nav-item-container {
     display: flex;
@@ -44,29 +45,15 @@
     color: white;
   }
   
-  .home-logo {
-    position: absolute;
-    left: 20px;
-  }
-  
   .admin-panel {
     flex: 1;
     text-align: center;
   }
   
   @media (max-width: 768px) {
-    .admin-navbar-container {
-      flex-direction: column;
+    /* responsive width for mobile */
+    .navbar {
       width: 100%;
-    }
-    .nav-item-container {
-      flex-direction: column;
-    }
-    .nav-item {
-      margin: 5px 0;
-    }
-    .home-logo {
-      position: static;
     }
   }
   </style>
