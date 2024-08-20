@@ -1,13 +1,74 @@
+<template>
+  <div>
+    <h1 class="sections mb-4">Background Section</h1>
+    <!-- Background Section -->
+    <div class="color-inputs">
+      <label for="bgColor1">Background Color 1:</label>
+      <input type="color" v-model="bgColor1" />
+
+      <label for="bgColor2">Background Color 2:</label>
+      <input type="color" v-model="bgColor2" />
+    </div>
+
+    <div class="buttons">
+      <button @click="updateBgColor">Save</button>
+      <button @click="restoreDefaults">Restore to Default</button>
+    </div>
+
+    <div class="gradient-preview" :style="{ background: gradientStyle }"></div>
+
+    <!-- Buldenej Instagram Post Links Section -->
+    <h1 class="sections">Buldenej Instagram Posts Section</h1>
+    <div v-for="post in buldenejInstagramPosts" :key="post.id" class="instagram-post-editor">
+      <label :for="'instagramUrl' + post.id">Instagram Post {{ post.id }} URL : </label>
+      <input
+        :id="'instagramUrl' + post.id"
+        type="text"
+        v-model="post.url"
+        @input="handleUrlChange(post.id, $event, 'buldenej')"
+      />
+      <InstagramPost :msg="post.url" :key="post.url" />
+    </div>
+    <div class="buttons">
+      <button @click="saveChanges">Save</button>
+      <button @click="restoreInstagramDefaults">Restore to Default</button>
+    </div>
+
+    <!-- Sigarme Instagram Post Links Section -->
+    <h1 class="sections">Sigarme Instagram Posts Section</h1>
+    <div v-for="post in sigarmeInstagramPosts" :key="post.id" class="instagram-post-editor">
+      <label :for="'instagramUrl' + post.id">Instagram Post {{ post.id }} URL : </label>
+      <input
+        :id="'instagramUrl' + post.id"
+        type="text"
+        v-model="post.url"
+        @input="handleUrlChange(post.id, $event, 'sigarme')"
+      />
+      <InstagramPost :msg="post.url" :key="post.url" />
+    </div>
+    <div class="buttons">
+      <button @click="saveChanges">Save</button>
+      <button @click="restoreInstagramDefaults">Restore to Default</button>
+    </div>
+
+    <!-- Conventions Management Section -->
+    <ConventionsManager />
+  </div>
+</template>
+
 <script>
+import ConventionsManager from '../components/ConventionsManager.vue';
 import { ref, computed, onMounted } from 'vue';
 import InstagramPost from '../components/InstagramPost.vue';
 import { supabase } from '../supabase';
 
 export default {
   components: {
-    InstagramPost
+    InstagramPost,
+    ConventionsManager
   },
   setup() {
+    // (Keep all existing code for handling the background and Instagram posts)
     const bgColor1 = ref('#ffffff');
     const bgColor2 = ref('#ffffff');
     const buldenejInstagramPosts = ref([
@@ -168,60 +229,6 @@ export default {
   }
 };
 </script>
-
-<template>
-  <div>
-    <h1 class="sections mb-4">Background Section</h1>
-    <div class="color-inputs">
-      <label for="bgColor1">Background Color 1:</label>
-      <input type="color" v-model="bgColor1" />
-
-      <label for="bgColor2">Background Color 2:</label>
-      <input type="color" v-model="bgColor2" />
-    </div>
-
-    <div class="buttons">
-      <button @click="updateBgColor">Save</button>
-      <button @click="restoreDefaults">Restore to Default</button>
-    </div>
-
-    <div class="gradient-preview" :style="{ background: gradientStyle }"></div>
-
-    <!-- Buldenej Instagram Post Links Section -->
-    <h1 class="sections">Buldenej Instagram Posts Section</h1>
-    <div v-for="post in buldenejInstagramPosts" :key="post.id" class="instagram-post-editor">
-      <label :for="'instagramUrl' + post.id">Instagram Post {{ post.id }} URL : </label>
-      <input
-        :id="'instagramUrl' + post.id"
-        type="text"
-        v-model="post.url"
-        @input="handleUrlChange(post.id, $event, 'buldenej')"
-      />
-      <InstagramPost :msg="post.url" :key="post.url" />
-    </div>
-    <div class="buttons">
-      <button @click="saveChanges">Save</button>
-      <button @click="restoreInstagramDefaults">Restore to Default</button>
-    </div>
-
-    <!-- Sigarme Instagram Post Links Section -->
-    <h1 class="sections">Sigarme Instagram Posts Section</h1>
-    <div v-for="post in sigarmeInstagramPosts" :key="post.id" class="instagram-post-editor">
-      <label :for="'instagramUrl' + post.id">Instagram Post {{ post.id }} URL : </label>
-      <input
-        :id="'instagramUrl' + post.id"
-        type="text"
-        v-model="post.url"
-        @input="handleUrlChange(post.id, $event, 'sigarme')"
-      />
-      <InstagramPost :msg="post.url" :key="post.url" />
-    </div>
-    <div class="buttons">
-      <button @click="saveChanges">Save</button>
-      <button @click="restoreInstagramDefaults">Restore to Default</button>
-    </div>
-  </div>
-</template>
 
 <style scoped>
 @font-face {

@@ -1,52 +1,50 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-const isPanelOpen = ref(false)
+const isPanelOpen = ref(false);
+const route = useRoute();  // Get current route
+const router = useRouter(); // Get router instance
 
 function toggleSidePanel() {
-  isPanelOpen.value = !isPanelOpen.value
+  isPanelOpen.value = !isPanelOpen.value;
 }
 
 function closeSidePanel() {
-  isPanelOpen.value = false
+  isPanelOpen.value = false;
+}
+
+function handleConventionsClick() {
+  if (route.path === '/conventions') {
+    router.push('/');  // Redirect to home if already on /conventions
+  } else {
+    router.push('/conventions');  // Go to /conventions if not already there
+  }
 }
 </script>
 
 <template>
   <nav class="navbar w-full rounded-xl px-4 py-2 flex justify-between items-center" id="topNavbar">
     <div class="flex items-center left-items">
-      <a
-        href="https://discord.gg/B7rrxRERsx"
-        target="”_blank”"
-        class="nav-item text-white hover:text-yellow-400"
-        >Discord</a
-      >
+      <a href="https://discord.gg/B7rrxRERsx" target="_blank" class="nav-item text-white hover:text-yellow-400">Discord</a>
     </div>
     <div class="flex items-center left-items">
-      <a href="#" class="nav-item text-white hover:text-yellow-400">Conventions</a>
+      <a @click="handleConventionsClick" class="nav-item text-white hover:text-yellow-400 cursor-pointer">
+        {{ route.path === '/conventions' ? 'Home' : 'Conventions' }}
+      </a>
     </div>
     <div class="flex items-center separator">
-      <router-link to="/admin">
-      <span class="logo-separator text-yellow-500 mx-2">
-        <img src="../assets/images/NavIMG.webp" alt="logo" class="h-8" />
-      </span>
-    </router-link>
+      <router-link to="/login">
+        <span class="logo-separator text-yellow-500 mx-2">
+          <img src="../assets/images/NavIMG.webp" alt="logo" class="h-8" />
+        </span>
+      </router-link>
     </div>
     <div class="flex items-center right-items">
-      <a
-        href="mailto:buldenej@gmail.com"
-        target="”_blank”"
-        class="nav-item text-white hover:text-yellow-400"
-        >Contact</a
-      >
+      <a href="mailto:buldenej@gmail.com" target="_blank" class="nav-item text-white hover:text-yellow-400">Contact</a>
     </div>
     <div class="flex items-center right-items">
-      <a
-        href="https://fr.tipeee.com/buldenej"
-        target="”_blank”"
-        class="nav-item text-white hover:text-yellow-400"
-        >Soutien</a
-      >
+      <a href="https://fr.tipeee.com/buldenej" target="_blank" class="nav-item text-white hover:text-yellow-400">Soutien</a>
       <div class="hamburger" @click="toggleSidePanel">
         <span class="bar"></span>
         <span class="bar"></span>
@@ -56,33 +54,18 @@ function closeSidePanel() {
   </nav>
   <div :class="['side-panel', { 'side-panel-open': isPanelOpen }]" @click="closeSidePanel">
     <div class="side-panel-content" @click.stop>
-      <a
-        href="https://discord.gg/B7rrxRERsx"
-        target="”_blank”"
-        class="nav-item text-white hover:text-yellow-400"
-        @click="closeSidePanel"
-        >Discord</a
-      >
-      <a href="#" class="nav-item text-white hover:text-yellow-400" @click="closeSidePanel"
-        >Conventions</a
-      >
-      <a
-        href="mailto:buldenej@gmail.com"
-        target="”_blank”"
-        class="nav-item text-white hover:text-yellow-400"
-        @click="closeSidePanel"
-        >Contact</a
-      >
-      <a
-        href="https://fr.tipeee.com/buldenej"
-        target="”_blank”"
-        class="nav-item text-white hover:text-yellow-400"
-        @click="closeSidePanel"
-        >Soutien</a
-      >
+      <a href="https://discord.gg/B7rrxRERsx" target="_blank" class="nav-item text-white hover:text-yellow-400" @click="closeSidePanel">Discord</a>
+      <a @click="handleConventionsClick" class="nav-item text-white hover:text-yellow-400 cursor-pointer">{{ route.path === '/conventions' ? 'Home' : 'Conventions' }}</a>
+      <a href="mailto:buldenej@gmail.com" target="_blank" class="nav-item text-white hover:text-yellow-400" @click="closeSidePanel">Contact</a>
+      <a href="https://fr.tipeee.com/buldenej" target="_blank" class="nav-item text-white hover:text-yellow-400" @click="closeSidePanel">Soutien</a>
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Your existing styles here */
+</style>
+
 
 <style scoped>
 @font-face {

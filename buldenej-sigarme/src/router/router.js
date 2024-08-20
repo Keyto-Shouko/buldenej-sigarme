@@ -5,7 +5,7 @@ import store from '../store';
 import LoginView from '../views/LoginView.vue'; // Login view
 import HomeView from '../views/HomeView.vue'; // Home view
 import AdminView from '../views/AdminView.vue'; // Admin view
-
+import ConventionsView from '../views/ConventionsView.vue';
 
 const routes = [
   {
@@ -29,6 +29,10 @@ const routes = [
     children: [
       { path: '', component: Admin, meta: { requiresAuth: true } }
     ]
+  },
+  {
+    path: '/conventions',
+    component: ConventionsView,
   },
   { path: '/:pathMatch(.*)*', redirect: '/' } // Catch-all route
 ];
