@@ -96,11 +96,9 @@
           end_date: '',
           stand: ''
         };
-        alert('Convention added successfully!');
       }
     } catch (error) {
       console.error('Error adding convention:', error);
-      alert('An error occurred while adding the convention.');
     }
   };
   
@@ -116,11 +114,9 @@
         console.error('Delete Error:', error.message);
       } else {
         conventions.value.splice(index, 1);
-        alert('Convention deleted successfully!');
       }
     } catch (error) {
       console.error('Error deleting convention:', error);
-      alert('An error occurred while deleting the convention.');
     }
   };
   
@@ -173,10 +169,8 @@
         }
       }
   
-      alert('Conventions saved successfully!');
     } catch (error) {
       console.error('Error saving conventions:', error);
-      alert('An error occurred while saving conventions.');
     }
   };
   </script>
