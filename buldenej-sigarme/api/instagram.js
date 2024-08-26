@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
     if (error) {
       console.error('Error updating Instagram posts:', error);
-      return res.status(500).json({ error: 'Error updating Instagram posts' });
+      return res.status(500).json({ error: 'Error updating Instagram posts', details : data });
     }
 
     res.status(200).json({ message: 'Latest post updated successfully' });
