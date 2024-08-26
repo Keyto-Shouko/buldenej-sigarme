@@ -6,7 +6,7 @@ export default async function handler(req, res) {
     // Fetch latest Instagram post
     const response = await fetch('https://instagram.com/graphql/query/?query_id=17888483320059182&variables={"id":"17825641829","first":1,"after":null}');
     const data = await response.json();
-    const latestPost = data.user.edge_owner_to_timeline_media.edges[0].node;
+    const latestPost = data.data.user.edge_owner_to_timeline_media.edges[0].node;
     const postUrl = `https://www.instagram.com/p/${latestPost.shortcode}/`;
 
     // Update the first row in the buldenejInsta table with the latest post URL
