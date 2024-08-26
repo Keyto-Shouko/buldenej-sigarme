@@ -22,7 +22,7 @@ jobs:
         working-directory: buldenej-sigarme
 
       - name: Run Script
-        run: node buldenej-sigarme/actions/instagram.js
+        run: node actions/instagram.js
         working-directory: buldenej-sigarme
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
