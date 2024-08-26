@@ -3,6 +3,7 @@ name: Update Instagram Post
 on:
   schedule:
     - cron: '0 * * * *' # Runs every hour
+  workflow_dispatch: # Allows manual trigger
 
 jobs:
   update-post:
