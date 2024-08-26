@@ -6,6 +6,7 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 const instagramApiUrl = process.env.INSTAGRAM_API_URL;
+const swiftInstaApiKey = process.env.SWIFT_INSTA_API_KEY;
 
 async function updateInstagramPost() {
   try {
@@ -16,7 +17,8 @@ async function updateInstagramPost() {
     const response = await fetch(instagramApiUrl, {
       method: 'GET',
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        'Accept': 'application/json', 
+        'X-API-KEY': swiftInstaApiKey
       }
     });
 
