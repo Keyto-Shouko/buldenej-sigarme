@@ -19,9 +19,11 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
+        working-directory: buldenej-sigarme
 
       - name: Run Script
         run: node buldenej-sigarme/actions/instagram.js
+        working-directory: buldenej-sigarme
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
