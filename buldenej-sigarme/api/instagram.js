@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { supabase } from '../src/supabase';
+import { supabase } from '../src/supabase.js';
 
 export default async function handler(req, res) {
   try {
