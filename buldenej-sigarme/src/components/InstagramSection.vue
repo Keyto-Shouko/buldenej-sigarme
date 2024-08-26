@@ -52,7 +52,7 @@
 </style>
 
 <script>
-import InstagramPost from './InstagramPost.vue'
+import InstagramPost from './InstagramPost.vue';
 import { supabase } from '../supabase';
 
 export default {
@@ -63,7 +63,7 @@ export default {
     return {
       column1: [],
       column2: []
-    }
+    };
   },
   async mounted() {
     await this.fetchInstagramPosts();
@@ -71,32 +71,33 @@ export default {
   methods: {
     async fetchInstagramPosts() {
       try {
-        const { data, error } = await supabase
-          .from('settings')
-          .select('buldenejPost1, buldenejPost2, buldenejPost3, sigarmePost1, sigarmePost2, sigarmePost3')
-          .eq('id', 1); // Assuming the row has an ID of 1
+        // Fetch Buldenej Instagram posts
+        const { data: buldenejData, error: buldenejError } = await supabase
+          .from('buldenejInsta')
+          .select('id, url')
+          .order('id', { ascending: true });
 
-        if (error) {
-          console.error('Error fetching Instagram posts:', error);
+        if (buldenejError) {
+          console.error('Error fetching Buldenej Instagram posts:', buldenejError);
           return;
         }
 
-        if (data && data.length > 0) {
-          const row = data[0];
-          // Split URLs into two columns
-          this.column1 = [
-            { id: 1, url: row.buldenejPost1 },
-            { id: 2, url: row.buldenejPost2 },
-            { id: 3, url: row.buldenejPost3 }
-          ];
-          this.column2 = [
-            { id: 1, url: row.sigarmePost1 },
-            { id: 2, url: row.sigarmePost2 },
-            { id: 3, url: row.sigarmePost3 }
-          ];
+        // Fetch Sigarme Instagram posts
+        const { data: sigarmeData, error: sigarmeError } = await supabase
+          .from('sigarmeInsta')
+          .select('id, url')
+          .order('id', { ascending: true });
+
+        if (sigarmeError) {
+          console.error('Error fetching Sigarme Instagram posts:', sigarmeError);
+          return;
         }
+
+        // Assuming both tables have exactly 3 posts each
+        this.column1 = buldenejData || [];
+        this.column2 = sigarmeData || [];
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Unexpected error:', error);
       }
     }
   }

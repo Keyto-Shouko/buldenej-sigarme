@@ -65,67 +65,56 @@ import { supabase } from '../supabase';
 export default {
   components: {
     InstagramPost,
-    ConventionsManager
+    ConventionsManager,
   },
   setup() {
-    // (Keep all existing code for handling the background and Instagram posts)
     const bgColor1 = ref('#ffffff');
     const bgColor2 = ref('#ffffff');
-    const buldenejInstagramPosts = ref([
-      { id: 1, url: '' },
-      { id: 2, url: '' },
-      { id: 3, url: '' }
-    ]);
-    const sigarmeInstagramPosts = ref([
-      { id: 1, url: '' },
-      { id: 2, url: '' },
-      { id: 3, url: '' }
-    ]);
+    const buldenejInstagramPosts = ref([]);
+    const sigarmeInstagramPosts = ref([]);
 
     const gradientStyle = computed(() => `linear-gradient(${bgColor1.value}, ${bgColor2.value})`);
 
     const fetchInstagramPosts = async () => {
-      const { data, error } = await supabase
-        .from('settings')
-        .select('buldenejPost1, buldenejPost2, buldenejPost3, sigarmePost1, sigarmePost2, sigarmePost3')
-        .eq('id', 1);
+      try {
+        const { data: buldenejData, error: buldenejError } = await supabase
+          .from('buldenejInsta')
+          .select('id, url');
 
-      if (error) {
-        console.error('Error fetching Instagram posts:', error);
-        return;
-      }
+        if (buldenejError) {
+          console.error('Error fetching Buldenej Instagram posts:', buldenejError);
+          return;
+        }
 
-      if (data && data.length > 0) {
-        const row = data[0];
-        buldenejInstagramPosts.value = [
-          { id: 1, url: row.buldenejPost1 },
-          { id: 2, url: row.buldenejPost2 },
-          { id: 3, url: row.buldenejPost3 }
-        ];
-        sigarmeInstagramPosts.value = [
-          { id: 1, url: row.sigarmePost1 },
-          { id: 2, url: row.sigarmePost2 },
-          { id: 3, url: row.sigarmePost3 }
-        ];
+        const { data: sigarmeData, error: sigarmeError } = await supabase
+          .from('sigarmeInsta')
+          .select('id, url');
+
+        if (sigarmeError) {
+          console.error('Error fetching Sigarme Instagram posts:', sigarmeError);
+          return;
+        }
+
+        buldenejInstagramPosts.value = buldenejData || [];
+        sigarmeInstagramPosts.value = sigarmeData || [];
+      } catch (error) {
+        console.error('Unexpected error fetching Instagram posts:', error);
       }
     };
 
     const updateInstagramPosts = async () => {
-      const { error } = await supabase
-        .from('settings')
-        .update({
-          buldenejPost1: buldenejInstagramPosts.value[0].url,
-          buldenejPost2: buldenejInstagramPosts.value[1].url,
-          buldenejPost3: buldenejInstagramPosts.value[2].url,
-          sigarmePost1: sigarmeInstagramPosts.value[0].url,
-          sigarmePost2: sigarmeInstagramPosts.value[1].url,
-          sigarmePost3: sigarmeInstagramPosts.value[2].url
-        })
-        .eq('id', 1);
+      try {
+        const buldenejUpdates = buldenejInstagramPosts.value.map(post =>
+          supabase.from('buldenejInsta').update({ url: post.url }).eq('id', post.id)
+        );
 
-      if (error) {
+        const sigarmeUpdates = sigarmeInstagramPosts.value.map(post =>
+          supabase.from('sigarmeInsta').update({ url: post.url }).eq('id', post.id)
+        );
+
+        await Promise.all([...buldenejUpdates, ...sigarmeUpdates]);
+      } catch (error) {
         console.error('Error updating Instagram posts:', error);
-        return;
       }
     };
 
@@ -147,29 +136,22 @@ export default {
       await fetchInstagramPosts(); // Refresh Instagram posts after saving
     };
 
-    const restoreInstagramDefaults = async () => {
+    const restoreInstagramDefaults = async (section) => {
+      const tableName = section === 'buldenej' ? 'buldenejInsta' : 'sigarmeInsta';
       const { data, error } = await supabase
-        .from('originalSettings')
-        .select('buldenejPost1, buldenejPost2, buldenejPost3, sigarmePost1, sigarmePost2, sigarmePost3')
-        .eq('id', 1);
+        .from(tableName)
+        .select('id, url')
+        .eq('id', 1); // Adjust query as needed for restoring defaults
 
       if (error) {
-        console.error('Error restoring default Instagram posts:', error);
+        console.error(`Error restoring default Instagram posts for ${section}:`, error);
         return;
       }
 
-      if (data && data.length > 0) {
-        const row = data[0];
-        buldenejInstagramPosts.value = [
-          { id: 1, url: row.buldenejPost1 },
-          { id: 2, url: row.buldenejPost2 },
-          { id: 3, url: row.buldenejPost3 }
-        ];
-        sigarmeInstagramPosts.value = [
-          { id: 1, url: row.sigarmePost1 },
-          { id: 2, url: row.sigarmePost2 },
-          { id: 3, url: row.sigarmePost3 }
-        ];
+      if (section === 'buldenej') {
+        buldenejInstagramPosts.value = data || [];
+      } else {
+        sigarmeInstagramPosts.value = data || [];
       }
     };
 
@@ -224,9 +206,9 @@ export default {
       restoreInstagramDefaults,
       handleUrlChange,
       updateBgColor,
-      restoreDefaults
+      restoreDefaults,
     };
-  }
+  },
 };
 </script>
 

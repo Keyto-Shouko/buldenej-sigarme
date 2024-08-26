@@ -1,7 +1,19 @@
 {
-    "rewrites": [
-      { "source": "/login", "destination": "/" },
-      { "source": "/admin", "destination": "/" },
-      { "source": "/(.*)", "destination": "/" }
-    ]
-  }
+  "rewrites": [
+    { "source": "/login", "destination": "/" },
+    { "source": "/admin", "destination": "/" },
+    { "source": "/(.*)", "destination": "/" }
+  ],
+  "cron": [
+    {
+      "path": "/api/instagram",
+      "schedule": "0 */6 * * *"
+    }
+  ],
+  "builds": [
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    }
+  ]
+}
