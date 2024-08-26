@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { supabase } from '../src/supabase.js';
+import { supabaseServer } from '../src/supabaseServer.js';
 
 export default async function handler(req, res) {
   try {
@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     const postUrl = `https://www.instagram.com/p/${latestPost.shortcode}/`;
 
     // Update the first row in the buldenejInsta table with the latest post URL
-    const { error } = await supabase
+    const { error } = await supabaseServer
       .from('buldenejInsta')
       .update({ url: postUrl })
       .eq('id', 1);
