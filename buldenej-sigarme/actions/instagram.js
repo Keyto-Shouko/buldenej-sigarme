@@ -1,13 +1,23 @@
 import fetch from 'node-fetch';
 import { createClient } from '@supabase/supabase-js';
+import express from 'express';
+import cors from 'cors';
 
+// Initialize Express
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// Initialize Supabase
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 const instagramApiUrl = process.env.INSTAGRAM_API_URL;
 
-async function updateInstagramPost() {
+// Define the route to update Instagram post
+app.get('/api/instagram', async (req, res) => {
   try {
+    // Fetch Instagram data
     const response = await fetch(instagramApiUrl);
     if (!response.ok) {
       throw new Error(`Instagram API error: ${response.statusText}`);
@@ -21,6 +31,7 @@ async function updateInstagramPost() {
 
     const postUrl = `https://www.instagram.com/p/${latestPost.shortcode}/`;
 
+    // Update Supabase
     const { error } = await supabase
       .from('buldenejInsta')
       .update({ url: postUrl })
@@ -28,13 +39,19 @@ async function updateInstagramPost() {
 
     if (error) {
       console.error('Error updating Instagram posts:', error);
-      return;
+      return res.status(500).json({ error: 'Error updating Instagram posts', details: error.message });
     }
 
     console.log('Latest post updated successfully');
+    res.status(200).json({ message: 'Latest post updated successfully' });
+
   } catch (error) {
     console.error('Error updating Instagram posts:', error);
+    res.status(500).json({ error: 'Error updating Instagram posts', details: error.message });
   }
-}
+});
 
-updateInstagramPost();
+// Export the Express app as a serverless function
+export default (req, res) => {
+  app(req, res);
+};

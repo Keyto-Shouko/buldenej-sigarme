@@ -3,5 +3,11 @@
     { "source": "/login", "destination": "/" },
     { "source": "/admin", "destination": "/" },
     { "source": "/(.*)", "destination": "/" }
+  ],
+  "crons": [
+    {
+      "path": "/api/instagram",
+      "schedule": "0 6 * * *"
+    }
   ]
 }
