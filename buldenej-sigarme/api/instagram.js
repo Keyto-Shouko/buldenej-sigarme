@@ -2,16 +2,6 @@ import fetch from 'node-fetch';
 import { supabaseServer } from '../src/supabaseServer.js';
 
 export default async function handler(req, res) {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*'); // or specify your origin
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-  // Handle preflight requests
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
   try {
     // Fetch latest Instagram post
     const response = await fetch('https://instagram.com/graphql/query/?query_id=17888483320059182&variables={"id":"17825641829","first":1,"after":null}');
