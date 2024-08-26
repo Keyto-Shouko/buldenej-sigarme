@@ -4,7 +4,7 @@
     { "source": "/admin", "destination": "/" },
     { "source": "/(.*)", "destination": "/" }
   ],
-  "cron": [
+  "crons": [
     {
       "path": "/api/instagram",
       "schedule": "0 */6 * * *"
