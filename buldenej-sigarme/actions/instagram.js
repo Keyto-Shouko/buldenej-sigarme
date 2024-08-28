@@ -12,29 +12,29 @@ app.use(express.json());
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
-const instagramApiUrl = process.env.INSTAGRAM_API_URL;
+const APIUrl = process.env.INSTAGRAM_API_URL;
+const token = process.env.INSTAGRAM_API_TOKEN;
 
 // Define the route to update Instagram post
 app.get('/api/instagram', async (req, res) => {
   try {
-    // Fetch Instagram data
+    // build the Instagram API URL, access token is already in the url but not the value
+    const instagramApiUrl = `${APIUrl}?access_token=${token}`;
     const response = await fetch(instagramApiUrl);
     if (!response.ok) {
       throw new Error(`Instagram API error: ${response.statusText}`);
     }
 
     const data = await response.json();
-    const latestPost = data?.data?.user?.edge_owner_to_timeline_media?.edges[0]?.node;
+    const latestPost = data.permalink;
     if (!latestPost) {
       throw new Error('Invalid Instagram response structure');
     }
 
-    const postUrl = `https://www.instagram.com/p/${latestPost.shortcode}/`;
-
     // Update Supabase
     const { error } = await supabase
       .from('buldenejInsta')
-      .update({ url: postUrl })
+      .update({ url: latestPost })
       .eq('id', 1);
 
     if (error) {
