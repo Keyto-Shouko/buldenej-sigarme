@@ -1,57 +1,29 @@
 import fetch from 'node-fetch';
-import { createClient } from '@supabase/supabase-js';
-import express from 'express';
-import cors from 'cors';
+import { supabaseServer } from '../src/supabaseServer.js';
 
-// Initialize Express
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-// Initialize Supabase
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
-const APIUrl = process.env.INSTAGRAM_API_URL;
-const token = process.env.INSTAGRAM_API_TOKEN;
-
-// Define the route to update Instagram post
-app.get('/api/instagram', async (req, res) => {
+export default async function handler(req, res) {
   try {
-    // build the Instagram API URL, access token is already in the url but not the value
-    const instagramApiUrl = `${APIUrl}?access_token=${token}`;
-    const response = await fetch(instagramApiUrl);
-    if (!response.ok) {
-      throw new Error(`Instagram API error: ${response.statusText}`);
-    }
-
+    // get token from env
+    const token = process.env.INSTAGRAM_TOKEN;
+    // Fetch latest Instagram post
+    const response = await fetch('https://graph.instagram.com/me/media?fields=permalink&limit=1&access_token=' + token);
     const data = await response.json();
     const latestPost = data.permalink;
-    if (!latestPost) {
-      throw new Error('Invalid Instagram response structure');
-    }
 
-    // Update Supabase
-    const { error } = await supabase
+    // Update the first row in the buldenejInsta table with the latest post URL
+    const { error } = await supabaseServer
       .from('buldenejInsta')
       .update({ url: latestPost })
       .eq('id', 1);
 
     if (error) {
       console.error('Error updating Instagram posts:', error);
-      return res.status(500).json({ error: 'Error updating Instagram posts', details: error.message });
+      return res.status(500).json({ error: 'Error updating Instagram posts', details : data });
     }
 
-    console.log('Latest post updated successfully');
     res.status(200).json({ message: 'Latest post updated successfully' });
-
   } catch (error) {
     console.error('Error updating Instagram posts:', error);
-    res.status(500).json({ error: 'Error updating Instagram posts', details: error.message });
+    res.status(500).json({ error: 'Error updating Instagram posts' });
   }
-});
-
-// Export the Express app as a serverless function
-export default (req, res) => {
-  app(req, res);
-};
+}
