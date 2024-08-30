@@ -14,9 +14,6 @@ export default async function handler(req, res) {
       });
     }
 
-    // Debugging: Log the token (make sure to remove or obfuscate this in production)
-    console.log('Using Instagram token:', token);
-
     // Fetch the latest Instagram post
     const response = await fetch(`https://graph.instagram.com/me/media?fields=permalink&limit=1&access_token=${token}`);
 
