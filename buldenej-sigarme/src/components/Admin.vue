@@ -79,7 +79,8 @@ export default {
       try {
         const { data: buldenejData, error: buldenejError } = await supabase
           .from('buldenejInsta')
-          .select('id, url');
+          .select('id, url')
+          .order('id', { ascending: true });
 
         if (buldenejError) {
           console.error('Error fetching Buldenej Instagram posts:', buldenejError);
@@ -88,7 +89,8 @@ export default {
 
         const { data: sigarmeData, error: sigarmeError } = await supabase
           .from('sigarmeInsta')
-          .select('id, url');
+          .select('id, url')
+          .order('id', { ascending: true });
 
         if (sigarmeError) {
           console.error('Error fetching Sigarme Instagram posts:', sigarmeError);
@@ -132,8 +134,21 @@ export default {
     };
 
     const saveChanges = async () => {
-      await updateInstagramPosts();
-      await fetchInstagramPosts(); // Refresh Instagram posts after saving
+      try {
+    // Try to update the Instagram posts
+    await updateInstagramPosts();
+    
+    // Fetch Instagram posts again to refresh the data after saving
+    await fetchInstagramPosts();
+
+    // If everything went well, display a success message
+    alert('Instagram posts saved successfully!');
+
+  } catch (error) {
+      // If an error occurred, display an error message
+      console.error('Error saving Instagram posts:', error);
+      alert('An error occurred while saving Instagram posts. Please try again later.');
+  }
     };
 
     const restoreInstagramDefaults = async (section) => {
@@ -145,6 +160,7 @@ export default {
 
       if (error) {
         console.error(`Error restoring default Instagram posts for ${section}:`, error);
+        alert('An error occurred while restoring default Instagram posts. Please try again later.');
         return;
       }
 
@@ -171,6 +187,7 @@ export default {
 
       if (error) {
         console.error('Error fetching default settings:', error);
+        alert('Une erreur est survenue lors de la restauration des paramètres par défaut. Veuillez réessayer ultérieurement.');
         return;
       }
 

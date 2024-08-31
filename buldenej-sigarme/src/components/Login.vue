@@ -17,6 +17,7 @@ const handleLogin = async () => {
   } catch (error) {
     console.error('Login failed', error)
     // Handle login error (e.g., show a message to the user)
+    alert('Erreur lors de la connexion. Veuillez vérifier vos identifiants.')
   }
 }
 
